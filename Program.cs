@@ -4,8 +4,6 @@ namespace CatWin
 {
     static class Program
     {
-        private static int noScreen;
-
         [STAThread]
         static void Main()
         {
@@ -33,8 +31,10 @@ namespace CatWin
             //Show screensaver in more than one screen if there's any
             for (int i = 1; i < Screen.AllScreens.Length; i++)
             {
-                noScreen = i;
-                Thread thread = new Thread(ThreadStart);
+                //Derefer integer value
+                int screenNumber = new int();
+                screenNumber = i;
+                Thread thread = new Thread(() => ThreadStart(screenNumber));
                 thread.Start();
             }
 
@@ -50,9 +50,9 @@ namespace CatWin
             Application.Run(screenSaver);
         }
 
-        private static void ThreadStart()
+        private static void ThreadStart(int screenNumber)
         {
-            ScreenSaver screenSaver = new ScreenSaver(noScreen);
+            ScreenSaver screenSaver = new ScreenSaver(screenNumber);
             screenSaver.KeyDown += KeyPressEvent;
             Application.Run(screenSaver);
         }
